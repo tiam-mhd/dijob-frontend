@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AdminSharedModule } from '../../../../shared/admin-shared.module';
 import { CategoryFormComponent } from '../category-form/category-form.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuCategoryService } from '../../../../../shared/services/menu-category.service';
+import { MenuCategory } from '../../../../../shared/models/menu-category';
 
 @Component({
   selector: 'app-category-list',
@@ -10,29 +12,47 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss'
 })
-export class CategoryListComponent {
+export class CategoryListComponent implements OnInit {
   crudModalTitle = "افزودن دسته جدید";
   categoryForm: FormGroup;
 
-  categories = [
-    { id: 1, title: 'نوشیدنی‌ها', description: 'انواع چای، قهوه، نوشابه و آبمیوه' },
-    { id: 2, title: 'غذاهای اصلی', description: 'پیتزا، برگر، پاستا و کباب' },
-    { id: 3, title: 'پیش‌غذا', description: 'سوپ، سالاد، سیب‌زمینی' },
-    { id: 4, title: 'دسر', description: 'کیک، بستنی، شیرینی' }
-  ];
+  categories: MenuCategory[] = [];
+  selectedCategory: MenuCategory = { id: 0 } as MenuCategory;
 
-  selectedCategory: any = {title: '', description: ''};
   showForm: boolean = false;
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private categoryService: MenuCategoryService) {
     this.categoryForm = this.fb.group({
       title: ['', Validators.required],
       description: ['']
     });
   }
 
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    this.categoryService.getAll().subscribe(data => {
+      this.categories = data;
+    });
+  }
+
+  saveCategory(category: MenuCategory) {
+    if (category.id) {
+      this.categoryService.update(category.id, category).subscribe(() => this.loadCategories());
+    } else {
+      this.categoryService.create(category).subscribe(() => this.loadCategories());
+    }
+    this.showForm = false;
+  }
+
+  deleteCategory(id: number) {
+    this.categoryService.delete(id).subscribe(() => this.loadCategories());
+  }
+  
   openCreateForm() {
-    this.selectedCategory = null;
+    this.selectedCategory = { id: 0 } as MenuCategory;
     this.showForm = true;
   }
 
@@ -43,23 +63,11 @@ export class CategoryListComponent {
 
   closeForm() {
     this.showForm = false;
-    this.selectedCategory = null;
+    this.selectedCategory =  { id: 0 } as MenuCategory;
   }
 
-  onSubmitCrud(){
+  onSubmitCrud() {
 
   }
 
-  saveCategory(data: any) {
-    if (data.id) {
-      // ویرایش
-      const index = this.categories.findIndex(c => c.id === data.id);
-      if (index > -1) this.categories[index] = data;
-    } else {
-      // ایجاد جدید
-      const newId = Math.max(...this.categories.map(c => c.id)) + 1;
-      this.categories.push({ id: newId, ...data });
-    }
-    this.closeForm();
-  }
 }

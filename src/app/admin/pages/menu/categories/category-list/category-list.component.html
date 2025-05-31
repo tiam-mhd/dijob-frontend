@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <h4>دسته‌بندی‌ها</h4>
-    <button class="btn btn-success text-light me-4" (click)="selectedCategory = {}" data-bs-toggle="modal" data-bs-target="#crudModal">+ دسته
+    <button class="btn btn-success text-light me-4" (click)="openCreateForm()" data-bs-toggle="modal" data-bs-target="#crudModal">+ دسته
         جدید</button>
 </div>
 
@@ -15,7 +15,7 @@
     <tbody>
         <tr *ngFor="let cat of categories">
             <td>{{ cat.title }}</td>
-            <td>{{ cat.description }}</td>
+            <td>{{ cat.items.length }}</td>
             <td>
                 <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedCategory = cat" data-bs-toggle="modal" data-bs-target="#crudModal">ویرایش</button>
                 <button class="btn btn-sm btn-outline-danger">حذف</button>
@@ -43,10 +43,10 @@
                         <div class="invalid-feedback">عنوان الزامی است.</div>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label">توضیحات</label>
                         <textarea formControlName="description" [(ngModel)]="selectedCategory.description" class="form-control" rows="3"></textarea>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
