@@ -1,0 +1,58 @@
+<div class="d-flex align-items-center mb-3">
+    <h4>دسته‌بندی‌ها</h4>
+    <button class="btn btn-success text-light me-4" (click)="selectedCategory = {}" data-bs-toggle="modal" data-bs-target="#crudModal">+ دسته
+        جدید</button>
+</div>
+
+<table class="table table-striped text-end text-center">
+    <thead class="table-light">
+        <tr>
+            <th scope="col">عنوان</th>
+            <th scope="col">توضیحات</th>
+            <th scope="col">عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let cat of items">
+            <td>{{ cat.title }}</td>
+            <td>{{ cat.description }}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedCategory = cat" data-bs-toggle="modal" data-bs-target="#crudModal">ویرایش</button>
+                <button class="btn btn-sm btn-outline-danger">حذف</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+                <form [formGroup]="categoryForm" (ngSubmit)="onSubmitCrud()">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="crudModalLabel">{{ crudModalTitle }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">عنوان دسته‌بندی</label>
+                        <input type="text" formControlName="title" class="form-control"
+                        [(ngModel)]="selectedCategory.title"
+                            [class.is-invalid]="categoryForm.get('title')?.invalid && categoryForm.get('title')?.dirty">
+                        <div class="invalid-feedback">عنوان الزامی است.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">توضیحات</label>
+                        <textarea formControlName="description" [(ngModel)]="selectedCategory.description" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
+                    <button type="button" class="btn btn-primary">ثبت اطلاعات</button>
+                </div>
+        </form>
+    </div>
+</div>
+</div>

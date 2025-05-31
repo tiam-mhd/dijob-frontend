@@ -1,0 +1,9 @@
+#wrapper {
+  display: flex;
+}
+
+#page-content-wrapper {
+  flex-grow: 1;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}

@@ -32,9 +32,16 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@coreui/coreui/dist/css/coreui.min.css",
+              "https://cdn.jsdelivr.net/npm/@coreui/coreui/dist/css/coreui.min.css",
+              "node_modules/@coreui/coreui/dist/css/coreui.css",
+              "node_modules/@coreui/icons/css/all.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -103,5 +110,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "dd8de5be-1bb9-4c72-b786-70e703d23bdc"
   }
 }
