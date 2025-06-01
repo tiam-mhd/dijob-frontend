@@ -13,19 +13,17 @@ import { MenuCategory } from '../../../../../shared/models/menu-category';
   styleUrl: './category-list.component.scss'
 })
 export class CategoryListComponent implements OnInit {
-  crudModalTitle = "افزودن دسته جدید";
-  categoryForm: FormGroup;
+  cafeId = localStorage.getItem("cafeId");
 
-  categories: MenuCategory[] = [];
+  crudModalTitle = "افزودن دسته جدید";
+  itemForm: FormGroup;
+
+  categories: MenuCategory[] = [] as MenuCategory[]
+
   selectedCategory: MenuCategory = { id: 0 } as MenuCategory;
 
-  showForm: boolean = false;
-
   constructor(private fb: FormBuilder, private categoryService: MenuCategoryService) {
-    this.categoryForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['']
-    });
+    this.itemForm = this.fb.group({ title: '' } as MenuCategory);
   }
 
   ngOnInit(): void {
@@ -36,41 +34,38 @@ export class CategoryListComponent implements OnInit {
     let id = localStorage.getItem("cafeId");
     if (id) {
       this.categoryService.getByCafe(+id).subscribe(res => {
-      this.categories = res.data as MenuCategory[];
-    });
+        this.categories = res.data as MenuCategory[];
+      });
     }
   }
 
-  saveCategory(category: MenuCategory) {
-    if (category.id) {
-      this.categoryService.update(category.id, category).subscribe(() => this.loadCategories());
-    } else {
-      this.categoryService.create(category).subscribe(() => this.loadCategories());
-    }
-    this.showForm = false;
-  }
-
-  deleteCategory(id: number) {
-    this.categoryService.delete(id).subscribe(() => this.loadCategories());
-  }
-  
-  openCreateForm() {
+  clearSelectedCategory() {
     this.selectedCategory = { id: 0 } as MenuCategory;
-    this.showForm = true;
   }
 
-  openEditForm(category: any) {
-    this.selectedCategory = category;
-    this.showForm = true;
+  saveCategory() {
+    let data = {
+      title: this.selectedCategory.title,
+      cafeId: (this.cafeId) ? +this.cafeId : 0
+    } as MenuCategory
+
+    if (this.selectedCategory.id != 0) {
+      this.categoryService.update(this.selectedCategory.id, data).subscribe(() => this.loadCategories());
+    } else {
+      this.categoryService.create(data).subscribe(() => this.loadCategories());
+    }
+    this.closeModal("crudModal")
   }
 
-  closeForm() {
-    this.showForm = false;
-    this.selectedCategory =  { id: 0 } as MenuCategory;
+  delete() {
+    this.categoryService.delete(this.selectedCategory.id).subscribe(() => this.loadCategories());
+    this.closeModal("deleteModal")
+    this.clearSelectedCategory();
   }
 
-  onSubmitCrud() {
-
+  closeModal(modalName: string) {
+    modalName = modalName + "Close";
+    const modalElement = document.getElementById(modalName) as HTMLElement;
+    modalElement.click();
   }
-
 }

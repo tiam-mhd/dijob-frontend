@@ -16,7 +16,7 @@ import { MenuCategory } from '../../../../../shared/models/menu-category';
 export class ItemListComponent {
   cafeId = localStorage.getItem("cafeId");
 
-  crudModalTitle = "افزودن دسته جدید";
+  crudModalTitle = "افزودن آیتم جدید";
   itemForm: FormGroup;
 
   categories: MenuCategory[] = [] as MenuCategory[]
@@ -26,7 +26,7 @@ export class ItemListComponent {
   showForm: boolean = false;
 
   constructor(private fb: FormBuilder, private categoryService: MenuCategoryService, private itemService: MenuItemService) {
-    
+
     this.itemForm = this.fb.group({ title: '', price: 0, categoryId: 0, description: '' } as MenuItem);
     this.loadMenuItems();
     this.loadCategories();
@@ -37,6 +37,7 @@ export class ItemListComponent {
     if (id) {
       this.itemService.getByCafe(+id).subscribe(res => {
         this.items = res.data as MenuItem[];
+        console.log(this.items);
       });
     }
   }
@@ -50,43 +51,37 @@ export class ItemListComponent {
     }
   }
 
-  openCreateForm() {
-    this.selectedItem = { id: 0 } as MenuItem;
-    this.showForm = true;
-  }
-
-  openEditForm(category: any) {
-    this.selectedItem = category;
-    this.showForm = true;
-  }
-
-  closeForm() {
-    this.showForm = false;
+  clearSelectedItem() {
     this.selectedItem = { id: 0 } as MenuItem;
   }
 
-  onSubmitCrud() {
+  saveItem() {
+    let data = {
+      title: this.selectedItem.title,
+      price: +this.selectedItem.price,
+      description: this.selectedItem.description,
+      image: '',
+      cafeId: (this.cafeId) ? +this.cafeId : 0,
+      categoryId: +this.selectedItem.categoryId
+    } as MenuItem
 
-  }
-
-  saveCategory() {
-    let data: MenuItem = {...this.selectedItem};
-    data.categoryId = +data.categoryId;
-    if(this.cafeId) data.cafeId = +this.cafeId;
-    data.price = +data.price;
-    data.image = '';
-    if (data.id != 0) {
-      this.itemService.update(data.id, data).subscribe(() => this.loadCategories());
+    if (this.selectedItem.id != 0) {
+      this.itemService.update(this.selectedItem.id, data).subscribe(() => this.loadCategories());
     } else {
-      data = {
-        title: data.title,
-        price: data.price,
-        description: data.description,
-        image: data.image,
-        cafeId: data.cafeId,
-        categoryId: data.categoryId
-      } as MenuItem
       this.itemService.create(data).subscribe(() => this.loadMenuItems());
     }
+    this.closeModal("crudModal")
+  }
+
+  delete() {
+    this.itemService.delete(this.selectedItem.id).subscribe(() => this.loadMenuItems());
+    this.closeModal("deleteModal")
+    this.clearSelectedItem();
+  }
+
+  closeModal(modalName: string) {
+    modalName = modalName + "Close";
+    const modalElement = document.getElementById(modalName) as HTMLElement;
+    modalElement.click();
   }
 }

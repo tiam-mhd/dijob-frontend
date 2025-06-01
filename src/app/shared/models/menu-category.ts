@@ -4,7 +4,7 @@ import { MenuItem } from "./menu-item";
 export interface MenuCategory {
   id: number;
   title: string;
-  cafeId: Number;
+  cafeId: number;
   cafe: Cafe;
   items: MenuItem[];
   createdAt: Date;

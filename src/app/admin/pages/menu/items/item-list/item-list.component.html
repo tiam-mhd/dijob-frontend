@@ -1,24 +1,33 @@
 <div class="d-flex align-items-center mb-3">
     <h4>آیتم های منو</h4>
-    <button class="btn btn-success text-light me-4" (click)="openCreateForm()" data-bs-toggle="modal" data-bs-target="#crudModal">+ آیتم
+    <button class="btn btn-success text-light me-4" (click)="clearSelectedItem()" data-bs-toggle="modal"
+        data-bs-target="#crudModal">+ آیتم
         جدید</button>
 </div>
 
-<table class="table table-striped text-end text-center">
-    <thead class="table-light">
+<table class="table table-bordered scrollable-table table-hover">
+    <thead class="thead-light">
         <tr>
-            <th scope="col">عنوان</th>
-            <th scope="col">توضیحات</th>
-            <th scope="col">عملیات</th>
+            <th scope="col" style="width: 5%;"></th>
+            <th scope="col" style="width: 10%;">عنوان</th>
+            <th scope="col" style="width: 15%;">قیمت</th>
+            <th scope="col" style="width: 20%;">دسته بندی</th>
+            <th scope="col" style="width: 30%;">توضیحات</th>
+            <th scope="col"class="text-center" style="width: 30%;">عملیات</th>
         </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let item of items">
-            <td>{{ item.title }}</td>
-            <td>{{ item.description }}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedItem = item" data-bs-toggle="modal" data-bs-target="#crudModal">ویرایش</button>
-                <button class="btn btn-sm btn-outline-danger">حذف</button>
+    <tbody style="max-height: 400px; overflow-y: auto;">
+        <tr *ngFor="let item of items; let i = index" style="cursor: pointer;">
+            <td style="width: 5%;font-size: .8em;">{{ i + 1 }}</td>
+            <td style="width: 10%;font-size: .8em;">{{ item.title }}</td>
+            <td style="width: 15%;font-size: .8em;">{{ item.price }}</td>
+            <td style="width: 20%;font-size: .8em;">{{ item.category.title }}</td>
+            <td style="width: 30%;font-size: .8em;">{{ item.description }}</td>
+            <td class="text-center" style="width: 30%;font-size: .8em;">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedItem = item" data-bs-toggle="modal"
+                    data-bs-target="#crudModal">ویرایش</button>
+                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+        data-bs-target="#deleteModal" (click)="selectedItem = item">حذف</button>
             </td>
         </tr>
     </tbody>
@@ -27,35 +36,34 @@
 
 <div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-
         <div class="modal-content">
-                <form [formGroup]="itemForm" (ngSubmit)="onSubmitCrud()">
+            <form [formGroup]="itemForm">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="crudModalLabel">{{ crudModalTitle }}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="crudModalClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">عنوان دسته‌بندی</label>
-                        <input type="text" formControlName="title" class="form-control"
-                        [(ngModel)]="selectedItem.title" required
+                        <label class="form-label">عنوان آیتم</label>
+                        <input type="text" formControlName="title" class="form-control" [(ngModel)]="selectedItem.title"
+                            required
                             [class.is-invalid]="itemForm.get('title')?.invalid && itemForm.get('title')?.dirty">
                         <div class="invalid-feedback">عنوان الزامی است.</div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label class="form-label">قیمت</label>
-                        <input type="text" formControlName="price" class="form-control"
-                        [(ngModel)]="selectedItem.price" required
+                        <input type="text" formControlName="price" class="form-control" [(ngModel)]="selectedItem.price"
+                            required
                             [class.is-invalid]="itemForm.get('price')?.invalid && itemForm.get('price')?.dirty">
                         <div class="invalid-feedback">قیمت الزامی است.</div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label class="form-label">عنوان دسته‌بندی</label>
                         <select name="category" id="category" class="form-control" formControlName="categoryId"
-                        [(ngModel)]="selectedItem.categoryId"
-                        [class.is-invalid]="itemForm.get('category')?.invalid && itemForm.get('category')?.dirty">
+                            [(ngModel)]="selectedItem.categoryId"
+                            [class.is-invalid]="itemForm.get('category')?.invalid && itemForm.get('category')?.dirty">
                             <option value=0>انتخاب دسته بندی</option>
                             <option *ngFor="let c of categories" [value]="c.id">{{ c.title }}</option>
                         </select>
@@ -64,14 +72,34 @@
 
                     <div class="mb-3">
                         <label class="form-label">توضیحات</label>
-                        <textarea formControlName="description" [(ngModel)]="selectedItem.description" class="form-control" rows="3"></textarea>
+                        <textarea formControlName="description" [(ngModel)]="selectedItem.description"
+                            class="form-control" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
-                    <button type="button" class="btn btn-primary" (click)="saveCategory()">ثبت اطلاعات</button>
+                    <button type="button" class="btn btn-primary" (click)="saveItem()">ثبت اطلاعات</button>
                 </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">{{ "حذف '" + selectedItem.title + "'" }}</h1>
+                    <button type="button" id="deleteModalClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span>با حذف این آیتم تمام اطلاعات مربوط به آن حذف خواهد شد.</span>
+                    <b class="d-block">آیا مطمئین هستید؟</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
+                    <button type="button" class="btn btn-danger text-light" (click)="delete()">بله، حذف کن</button>
+                </div>
+        </div>
+    </div>
 </div>
