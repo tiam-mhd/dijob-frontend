@@ -33,9 +33,12 @@ export class CategoryListComponent implements OnInit {
   }
 
   loadCategories() {
-    this.categoryService.getAll().subscribe(data => {
-      this.categories = data;
+    let id = localStorage.getItem("cafeId");
+    if (id) {
+      this.categoryService.getByCafe(+id).subscribe(res => {
+      this.categories = res.data as MenuCategory[];
     });
+    }
   }
 
   saveCategory(category: MenuCategory) {

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Cafe } from '../../../shared/models/cafe';
 import { CafeService } from '../../../shared/services/cafe.service';
+import { AdminSharedModule } from '../../shared/admin-shared.module';
 
 @Component({
   selector: 'app-cafe',
-  imports: [],
+  imports: [AdminSharedModule],
   templateUrl: './cafe.component.html',
   styleUrl: './cafe.component.scss'
 })
@@ -14,20 +15,27 @@ export class CafeComponent {
 constructor(private cafeService: CafeService) {}
 
   ngOnInit(): void {
-      this.loadCategories();
+      this.loadCafes();
     }
   
-    loadCategories() {
-      this.cafeService.getByUser(0).subscribe(data => {
-        this.cafe = data;
+    loadCafes() {
+      this.cafeService.getByUser(4).subscribe(res => {
+        this.cafe = (res.data as Cafe[])[0];
       });
     }
   
     saveCategory(cafe: Cafe) {
       if (cafe.id) {
-        this.cafeService.update(cafe.id, cafe).subscribe(() => this.loadCategories());
+        this.cafeService.update(cafe.id, cafe).subscribe(() => this.loadCafes());
       } else {
-        this.cafeService.create(cafe).subscribe(() => this.loadCategories());
+        this.cafeService.create(cafe).subscribe(() => this.loadCafes());
       }
     }
+
+    selectCafe(cafe:Cafe){
+      localStorage.setItem("cafeId",cafe.id.toString());
+    }
+
+    submit(){}
+    reset(){}
 }

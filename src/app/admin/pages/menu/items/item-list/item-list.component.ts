@@ -1,64 +1,92 @@
 import { Component } from '@angular/core';
 import { AdminSharedModule } from '../../../../shared/admin-shared.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuItem } from '../../../../../shared/models/menu-item';
+import { MenuItemService } from '../../../../../shared/services/menu-item.service';
+import { MenuCategoryService } from '../../../../../shared/services/menu-category.service';
+import { MenuCategory } from '../../../../../shared/models/menu-category';
 
 @Component({
   selector: 'app-item-list',
-    standalone: true,
-    imports: [AdminSharedModule],
+  standalone: true,
+  imports: [AdminSharedModule],
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.scss'
 })
 export class ItemListComponent {
-crudModalTitle = "افزودن دسته جدید";
-  categoryForm: FormGroup;
+  cafeId = localStorage.getItem("cafeId");
 
-  items = [
-    { id: 1, title: 'نوشیدنی‌ها', description: 'انواع چای، قهوه، نوشابه و آبمیوه' },
-    { id: 2, title: 'غذاهای اصلی', description: 'پیتزا، برگر، پاستا و کباب' },
-    { id: 3, title: 'پیش‌غذا', description: 'سوپ، سالاد، سیب‌زمینی' },
-    { id: 4, title: 'دسر', description: 'کیک، بستنی، شیرینی' }
-  ];
+  crudModalTitle = "افزودن دسته جدید";
+  itemForm: FormGroup;
 
-  selectedCategory: any = {title: '', description: ''};
+  categories: MenuCategory[] = [] as MenuCategory[]
+  items: MenuItem[] = [] as MenuItem[]
+
+  selectedItem: MenuItem = { id: 0 } as MenuItem;
   showForm: boolean = false;
 
-  constructor(private fb: FormBuilder){
-    this.categoryForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['']
-    });
+  constructor(private fb: FormBuilder, private categoryService: MenuCategoryService, private itemService: MenuItemService) {
+    
+    this.itemForm = this.fb.group({ title: '', price: 0, categoryId: 0, description: '' } as MenuItem);
+    this.loadMenuItems();
+    this.loadCategories();
+  }
+
+  loadMenuItems() {
+    let id = localStorage.getItem("cafeId");
+    if (id) {
+      this.itemService.getByCafe(+id).subscribe(res => {
+        this.items = res.data as MenuItem[];
+      });
+    }
+  }
+
+  loadCategories() {
+    let id = localStorage.getItem("cafeId");
+    if (id) {
+      this.categoryService.getByCafe(+id).subscribe(res => {
+        this.categories = res.data as MenuCategory[];
+      });
+    }
   }
 
   openCreateForm() {
-    this.selectedCategory = null;
+    this.selectedItem = { id: 0 } as MenuItem;
     this.showForm = true;
   }
 
   openEditForm(category: any) {
-    this.selectedCategory = category;
+    this.selectedItem = category;
     this.showForm = true;
   }
 
   closeForm() {
     this.showForm = false;
-    this.selectedCategory = null;
+    this.selectedItem = { id: 0 } as MenuItem;
   }
 
-  onSubmitCrud(){
-    
+  onSubmitCrud() {
+
   }
 
-  saveCategory(data: any) {
-    if (data.id) {
-      // ویرایش
-      const index = this.items.findIndex(c => c.id === data.id);
-      if (index > -1) this.items[index] = data;
+  saveCategory() {
+    let data: MenuItem = {...this.selectedItem};
+    data.categoryId = +data.categoryId;
+    if(this.cafeId) data.cafeId = +this.cafeId;
+    data.price = +data.price;
+    data.image = '';
+    if (data.id != 0) {
+      this.itemService.update(data.id, data).subscribe(() => this.loadCategories());
     } else {
-      // ایجاد جدید
-      const newId = Math.max(...this.items.map(c => c.id)) + 1;
-      this.items.push({ id: newId, ...data });
+      data = {
+        title: data.title,
+        price: data.price,
+        description: data.description,
+        image: data.image,
+        cafeId: data.cafeId,
+        categoryId: data.categoryId
+      } as MenuItem
+      this.itemService.create(data).subscribe(() => this.loadMenuItems());
     }
-    this.closeForm();
   }
 }

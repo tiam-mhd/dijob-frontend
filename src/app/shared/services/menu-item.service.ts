@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { MenuItem } from '../models/menu-item';
 import { GlobalService } from './global.service';
 import { HttpClient } from '@angular/common/http';
+import { Response } from '../models/response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +15,27 @@ private baseUrl = "";
     this.baseUrl = `${this.globalService.apiUrl}/menu/item`
   }
 
-  getAll(): Observable<MenuItem[]> {
-    return this.http.get<MenuItem[]>(this.baseUrl);
+  getAll(): Observable<Response<MenuItem[]>> {
+    return this.http.get<Response<MenuItem[]>>(this.baseUrl);
+  }
+  
+    getByCafe(id: number): Observable<Response<MenuItem[]>> {
+      return this.http.get<Response<MenuItem[]>>(`${this.baseUrl}/ofcafe/${id}`);
+    }
+
+  getById(id: number): Observable<Response<MenuItem>> {
+    return this.http.get<Response<MenuItem>>(`${this.baseUrl}/${id}`);
   }
 
-  getById(id: number): Observable<MenuItem> {
-    return this.http.get<MenuItem>(`${this.baseUrl}/${id}`);
+  create(item: MenuItem): Observable<Response<MenuItem>> {
+    return this.http.post<Response<MenuItem>>(`${this.baseUrl}/add`, item);
   }
 
-  create(category: Partial<MenuItem>): Observable<MenuItem> {
-    return this.http.post<MenuItem>(this.baseUrl, category);
+  update(id: number, category: Partial<MenuItem>): Observable<Response<MenuItem>> {
+    return this.http.put<Response<MenuItem>>(`${this.baseUrl}/${id}`, category);
   }
 
-  update(id: number, category: Partial<MenuItem>): Observable<MenuItem> {
-    return this.http.put<MenuItem>(`${this.baseUrl}/${id}`, category);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  delete(id: number): Observable<Response<MenuItem>> {
+    return this.http.delete<Response<MenuItem>>(`${this.baseUrl}/${id}`);
   }
 }

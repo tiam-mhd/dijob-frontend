@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GlobalService } from './global.service';
 import { Cafe } from '../models/cafe';
+import { Response } from '../models/response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +15,27 @@ export class CafeService {
     this.baseUrl = `${this.globalService.apiUrl}/cafe`
   }
 
-  getAll(): Observable<Cafe[]> {
-    return this.http.get<Cafe[]>(this.baseUrl);
+  getAll(): Observable<Response<Cafe[]>> {
+    return this.http.get<Response<Cafe[]>>(this.baseUrl);
   }
 
-  getById(id: number): Observable<Cafe> {
-    return this.http.get<Cafe>(`${this.baseUrl}/${id}`);
+  getById(id: number): Observable<Response<Cafe>> {
+    return this.http.get<Response<Cafe>>(`${this.baseUrl}/${id}`);
   }
 
-  getByUser(userId: number): Observable<Cafe> {
-    return this.http.get<Cafe>(`${this.baseUrl}/ofUser/${userId}`);
+  getByUser(userId: number): Observable<Response<Cafe[]>> {
+    return this.http.get<Response<Cafe[]>>(`${this.baseUrl}/ofUser/${userId}`);
   }
 
-  create(cafe: Partial<Cafe>): Observable<Cafe> {
-    return this.http.post<Cafe>(this.baseUrl, cafe);
+  create(cafe: Partial<Cafe>): Observable<Response<Cafe>> {
+    return this.http.post<Response<Cafe>>(this.baseUrl, cafe);
   }
 
-  update(id: number, cafe: Partial<Cafe>): Observable<Cafe> {
-    return this.http.put<Cafe>(`${this.baseUrl}/${id}`, cafe);
+  update(id: number, cafe: Partial<Cafe>): Observable<Response<Cafe>> {
+    return this.http.put<Response<Cafe>>(`${this.baseUrl}/${id}`, cafe);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  delete(id: number): Observable<Response<Cafe>> {
+    return this.http.delete<Response<Cafe>>(`${this.baseUrl}/${id}`);
   }
 }
