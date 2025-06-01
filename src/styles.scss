@@ -1,2 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('./app/admin/shared/css/admin-style.scss');
+
+body.dark-bg {
+    min-height: 100vh;
+    margin: 0;
+    background-color: #1d0e00; /* ساده و دارک */
+    direction: rtl;
+    color: #fff;
+  }
+  
+  

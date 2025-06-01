@@ -1,0 +1,23 @@
+.mobile-header {
+  background-color: #1e1e1e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-icon {
+  position: relative;
+  text-decoration: none;
+}
+
+.header-icon .badge {
+  font-size: 0.6rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  text-align: center;
+  line-height: 1.2rem;
+}
+.translate-middle {
+  transform: translate(165%, -25%) !important;
+}

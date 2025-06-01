@@ -13,8 +13,8 @@
             <th scope="col" class=" text-center">عملیات</th>
         </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let category of categories; let i = index">
+    <tbody style="max-height: 400px; overflow-y: auto;">
+        <tr *ngFor="let category of categories; let i = index" style="cursor: pointer;">
             <td>{{ i + 1 }}</td>
             <td>{{ category.title }}</td>
             <td class=" text-center">

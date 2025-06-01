@@ -3,3 +3,33 @@ table {
     vertical-align: middle;
   }
 }
+.scrollable-table {
+  table-layout: fixed;
+  max-height: 30em;
+  overflow-y: auto;
+  display: block;
+}
+
+.scrollable-table thead,
+.scrollable-table tbody,
+.scrollable-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.scrollable-table tbody tr{
+transition: .2s !important;
+}
+.scrollable-table tbody tr:hover{
+background-color: rgb(83, 83, 83) !important;
+}
+
+.scrollable-table thead {
+  width: calc(100% - 1em); /* برای حذف اسکرول افقی */
+}
+
+.scrollable-table tbody {
+  display: block;
+  max-height: 350px;
+  overflow-y: auto;
+}

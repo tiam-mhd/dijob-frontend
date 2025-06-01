@@ -1,0 +1,41 @@
+<nav class="category-navbar d-flex gap-2 px-3 py-2 overflow-auto">
+    <a class="category-item" *ngFor="let category of categories" (click)="loadItems(category.id)">{{ category.title
+        }}</a>
+</nav>
+
+<div class="container py-4">
+    <div class="row g-3">
+        <div class="col-6" *ngFor="let item of items" data-bs-toggle="modal" data-bs-target="#menuItemModal">
+            <div class="glass-card p-3" (click)="selectItem(item)">
+                <h5 class="card-title">{{item.title}}</h5>
+                <p class="card-text">{{item.description}}</p>
+                <button class="card-button btn btn-outline-warning">افزودن به سبد خرید</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-modal p-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white" id="menuItemModalLabel">{{selectedItem.title}}</h5>
+                <button type="button" class="btn-close btn-close-white float-start" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-white text-center">
+                <p class="mb-2">{{selectedItem.description}}</p>
+                <p class="fw-bold">قیمت: {{selectedItem.price}}</p>
+
+                <div class="quantity-control d-flex justify-content-center align-items-center gap-3 my-3">
+                    <button class="btn btn-outline-light px-3" (click)="decreaseQty()">-</button>
+                    <span class="fs-5">{{ quantity }}</span>
+                    <button class="btn btn-outline-light px-3" (click)="increaseQty()">+</button>
+                </div>
+
+                <button class="btn btn-warning w-100">افزودن به سبد خرید</button>
+            </div>
+        </div>
+    </div>
+</div>

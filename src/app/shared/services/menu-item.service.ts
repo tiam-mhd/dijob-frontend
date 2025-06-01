@@ -19,9 +19,13 @@ private baseUrl = "";
     return this.http.get<Response<MenuItem[]>>(this.baseUrl);
   }
   
-    getByCafe(id: number): Observable<Response<MenuItem[]>> {
-      return this.http.get<Response<MenuItem[]>>(`${this.baseUrl}/ofcafe/${id}`);
-    }
+  getByCategory(id: number): Observable<Response<MenuItem[]>> {
+    return this.http.get<Response<MenuItem[]>>(`${this.baseUrl}/ofCategory/${id}`);
+  }
+  
+  getByCafe(id: number): Observable<Response<MenuItem[]>> {
+    return this.http.get<Response<MenuItem[]>>(`${this.baseUrl}/ofcafe/${id}`);
+  }
 
   getById(id: number): Observable<Response<MenuItem>> {
     return this.http.get<Response<MenuItem>>(`${this.baseUrl}/${id}`);
