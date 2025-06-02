@@ -7,13 +7,13 @@ import { MenuItemService } from '../../../../shared/services/menu-item.service';
 import { MenuItem } from '../../../../shared/models/menu-item';
 
 @Component({
-  selector: 'app-category-list',
+  selector: 'app-menu-list',
   standalone: true,
   imports: [CustomerSharedModule],
-  templateUrl: './category-list.component.html',
-  styleUrl: './category-list.component.scss'
+  templateUrl: './menu-list.component.html',
+  styleUrl: './menu-list.component.scss'
 })
-export class CategoryListComponent {
+export class MenuListComponent {
   quantity=0
   cafeId = 1;
   categories: MenuCategory[] = [] as MenuCategory[]
