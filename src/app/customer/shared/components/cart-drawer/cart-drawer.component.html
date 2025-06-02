@@ -1,0 +1,31 @@
+<div [class.back-cart]="isOpen" (click)="close()">
+    <div class="cart-drawer position-fixed bottom-0 start-0 end-0 bg-glass-dark rounded-top-4 shadow-lg p-4"
+        [class.show]="isOpen" (click)="$event.stopPropagation()">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="text-white m-0">🛒 سبد خرید</h5>
+            <button type="button" class="btn-close btn-close-white float-start" aria-label="Close"
+                (click)="close()"></button>
+        </div>
+
+        <div *ngIf="orderItems.length > 0; else emptyCart">
+            <div *ngFor="let item of orderItems"
+                class="d-flex justify-content-between align-items-center text-white mb-3">
+                <div>
+                    <strong>{{ item.menuItem.title }}</strong>
+                    <div class="small">{{ item.quantity }} × {{ item.menuItem.price }} تومان</div>
+                </div>
+                <div>{{ item.quantity * item.menuItem.price }} تومان</div>
+            </div>
+            <hr class="bg-white">
+            <div class="d-flex justify-content-between text-white fw-bold">
+                <div>مجموع:</div>
+                <div>{{ getTotal() }} تومان</div>
+            </div>
+            <button class="btn btn-warning mt-3 w-100">ثبت سفارش</button>
+        </div>
+
+        <ng-template #emptyCart>
+            <p class="text-white text-center mt-5">سبد خرید شما خالی است.</p>
+        </ng-template>
+    </div>
+</div>

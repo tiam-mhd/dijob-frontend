@@ -10,6 +10,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'menu', pathMatch: 'full' },
       { path: 'menu', component: MenuListComponent },
+      { path: 'order', loadChildren: () => import('./pages/order/order-routing.module').then(m => m.OrderRoutingModule) },
     ]
   }];
 
