@@ -8,11 +8,12 @@ import { CartDrawerComponent } from '../shared/components/cart-drawer/cart-drawe
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CustomerSharedModule, CartDrawerComponent],
+  imports: [CustomerSharedModule,SidebarComponent, CartDrawerComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
+  @ViewChild('sidebar') sidebar!: SidebarComponent;
   @ViewChild('cartDrawer') cartDrawer!: CartDrawerComponent;
 
 }

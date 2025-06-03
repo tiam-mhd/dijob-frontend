@@ -8,6 +8,8 @@ import { MenuItem } from '../../../../shared/models/menu-item';
 import { CartService } from '../../../shared/services/cart.service';
 import { OrderItem } from '../../../../shared/models/order-item';
 import { CartDrawerComponent } from '../../../shared/components/cart-drawer/cart-drawer.component';
+import { OrderService } from '../../../../shared/services/order.service';
+import { Order } from '../../../../shared/models/order';
 
 declare var bootstrap: any; // اگر از CDN استفاده می‌کنی
 
@@ -30,11 +32,20 @@ export class MenuListComponent {
   selectedCategory: MenuCategory = { id: 0 } as MenuCategory;
   selectedItem: MenuItem = { id: 0 } as MenuItem;
 
+  cartItems: OrderItem[] = [] as OrderItem[];
+  private itemsTimeout: any = null;
+
   constructor(private categoryService: MenuCategoryService,
     private itemService: MenuItemService,
-    private cartService: CartService) { }
+    private orderService: OrderService,
+    private cartService: CartService) {
+    this.cartService.cart$.subscribe(items => {
+      this.cartItems = items;
+    });
+  }
 
   ngOnInit(): void {
+    this.cartService.getCartOfUser();
     this.loadCategories();
   }
 
@@ -50,6 +61,7 @@ export class MenuListComponent {
     const modal = bootstrap.Modal.getInstance(this.modalRef.nativeElement);
     modal.hide();
   }
+
   onButtonClick(event: MouseEvent) {
     event.stopPropagation();
   }
@@ -74,7 +86,8 @@ export class MenuListComponent {
     }
   }
 
-  getItemCount(id:number):number{
+  getItemCount(id: number): number {
+    let orderId = this.cartItems.find(ci => ci.menuItemId == id)
     return this.cartService.getItemCount(id);
   }
 
@@ -100,12 +113,31 @@ export class MenuListComponent {
     } as OrderItem;
     this.cartService.increase(orderItem)
     this.quantity++;
+    this.addToCard();
   }
 
   decreaseQty(id: number) {
-    if (this.quantity > 1) {
-      this.cartService.decrease(id)
-      this.quantity--;
-    }
+    this.cartService.decrease(id)
+    this.quantity--;
+    this.addToCard();
+  }
+
+  addToCard() {
+    clearTimeout(this.itemsTimeout)
+    this.itemsTimeout = setTimeout(() => {
+      const items = [] as OrderItem[];
+      this.cartService.getItems().forEach(ci => {
+        items.push({ menuItemId: ci.menuItem.id, quantity: ci.quantity } as OrderItem)
+      });
+      const order: Order = {
+        customerId: 4,
+        cafeId: 1,
+        items: items
+      } as Order
+      
+      this.orderService.addToCart(order).subscribe(res => {
+      });
+      clearTimeout(this.itemsTimeout)
+    }, 3000);
   }
 }

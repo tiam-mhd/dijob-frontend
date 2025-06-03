@@ -1,0 +1,44 @@
+.order-card-glass {
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.order-card-glass:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.4em 0.8em;
+  border-radius: 1rem;
+  backdrop-filter: blur(6px);
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* سفارشی‌سازی وضعیت‌ها با رنگ لطیف */
+.status-badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.6) !important;
+  color: #212529 !important;
+}
+
+.status-badge.bg-success {
+  background-color: rgba(40, 167, 69, 0.6) !important;
+  color: #fff !important;
+}
+
+.status-badge.bg-danger {
+  background-color: rgba(220, 53, 69, 0.6) !important;
+  color: #fff !important;
+}
+
+.status-badge.bg-info {
+  background-color: rgba(23, 162, 184, 0.6) !important;
+  color: #fff !important;
+}

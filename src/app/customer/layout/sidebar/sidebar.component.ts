@@ -12,4 +12,14 @@ import { navItems } from '../sidebar-nav.config';
 })
 export class SidebarComponent {
   navItems = navItems;
+
+  isSidebarOpen = false;
+
+toggleSidebar() {
+  this.isSidebarOpen = !this.isSidebarOpen;
+}
+
+closeSidebar() {
+  this.isSidebarOpen = false;
+}
 }

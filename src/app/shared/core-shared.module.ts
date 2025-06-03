@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PersianDatePipe } from './pipes/persian-date.pipe';
 
 @NgModule({
-    providers:[],
+  declarations: [
+  ],
+  providers: [],
   imports: [
     /* Angular Modules */
     CommonModule,
@@ -18,7 +21,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
     CommonModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
-export class CoreSharedModule {}
+export class CoreSharedModule { }

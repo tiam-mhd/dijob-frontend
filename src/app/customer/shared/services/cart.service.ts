@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { OrderItem } from '../../../shared/models/order-item';
 import { MenuItem } from '../../../shared/models/menu-item';
+import { OrderService } from '../../../shared/services/order.service';
+import { Order } from '../../../shared/models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +13,22 @@ export class CartService {
   private items = new Map<number, OrderItem>();
   private cartSubject = new BehaviorSubject<OrderItem[]>([]);
 
-  constructor() { }
-  
+  constructor(private orderService: OrderService) { }
+
+  getCartOfUser() {
+    this.orderService.getCartOfUser(4, 1).subscribe(res => {
+      
+      if (res.isSuccess && res.data){
+        const cart: Order = (res.data as any);
+        cart.items.forEach(item => {
+          if (!this.items.has(item.menuItemId))
+            this.items.set(item.menuItemId, { ...item, quantity: item.quantity } as OrderItem);
+        });
+        this.updateCart()
+      }
+    });
+  }
+
   cart$ = this.cartSubject.asObservable();
 
   addToCart(item: OrderItem) {
@@ -20,24 +36,26 @@ export class CartService {
     this.items.set(item.id, { ...item, quantity: 1 } as OrderItem);
     this.updateCart();
   }
+  
+  getItems(): OrderItem[] {
+    return Array.from(this.items.values()) as OrderItem[];
+  }
 
   increase(item: OrderItem) {
     const itemcard = this.items.get(item.id);
     if (itemcard) {
       itemcard.quantity++;
       this.updateCart();
-    }else{
+    } else {
       this.addToCart(item)
     }
   }
 
-  decrease(id:number) {
+  decrease(id: number) {
     const item = this.items.get(id);
-    console.log(item);
-    
     if (item) {
       item.quantity--;
-      if (item.quantity <= 0) this.items.delete(id);
+      // if (item.quantity <= 0) this.items.delete(id);
       this.updateCart();
     }
   }
@@ -54,7 +72,5 @@ export class CartService {
 
   private updateCart() {
     this.cartSubject.next(Array.from(this.items.values()));
-    console.log(this.items);
-    
   }
 }

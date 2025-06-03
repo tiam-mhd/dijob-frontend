@@ -1,0 +1,28 @@
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1020;
+}
+
+.glassy-sidebar {
+  position: fixed;
+  top: 0;
+  right: -80%;
+  width: 70%;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease-in-out;
+  z-index: 1030;
+  color: white;
+}
+
+.glassy-sidebar.sidebar-open {
+  right: 0;
+}

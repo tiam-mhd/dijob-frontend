@@ -1,1 +1,39 @@
-<p>order-list works!</p>
+<div class="container py-4">
+  <div class="row g-4">
+    <div
+      class="col-12 col-md-6 col-lg-4"
+      *ngFor="let order of orders"
+    >
+      <div
+        class="order-card-glass position-relative shadow p-4 rounded-4 text-white"
+      >
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">سفارش </h5>
+            <small>{{ order.createdAt | persianDate:'jD jMMMM jYYYY - HH:mm' }}</small>
+          </div>
+          <span
+            class="badge status-badge"
+            [ngClass]="getStatusClass(order.status)"
+          >
+            {{ getStatusLabel(order.status) }}
+          </span>
+        </div>
+
+        <ul class="list-unstyled mb-3">
+          <li *ngFor="let item of order.items">
+            🍽️ {{ item.menuItem.title }} × {{ item.quantity }}
+            <span class="float-end fw-bold">
+              {{ (item.menuItem.price * item.quantity) | currency:' تومان '}}
+            </span>
+          </li>
+        </ul>
+
+        <div class="text-end fw-bold fs-6">
+          💵 جمع کل:
+          {{ getTotal(order.items) | currency:' تومان ' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

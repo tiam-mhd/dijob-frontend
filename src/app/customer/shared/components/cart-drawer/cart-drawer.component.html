@@ -8,20 +8,21 @@
         </div>
 
         <div *ngIf="orderItems.length > 0; else emptyCart">
-            <div *ngFor="let item of orderItems"
-                class="d-flex justify-content-between align-items-center text-white mb-3">
-                <div>
-                    <strong>{{ item.menuItem.title }}</strong>
-                    <div class="small">{{ item.quantity }} × {{ item.menuItem.price }} تومان</div>
+            <div *ngFor="let item of orderItems">
+                <div class="d-flex justify-content-between align-items-center text-white mb-3" *ngIf="item.quantity > 0">
+                    <div>
+                        <strong>{{ item.menuItem.title }}</strong>
+                        <div class="small">{{ item.quantity }} × {{ item.menuItem.price }} تومان</div>
+                    </div>
+                    <div>{{ item.quantity * item.menuItem.price }} تومان</div>
                 </div>
-                <div>{{ item.quantity * item.menuItem.price }} تومان</div>
             </div>
             <hr class="bg-white">
             <div class="d-flex justify-content-between text-white fw-bold">
                 <div>مجموع:</div>
                 <div>{{ getTotal() }} تومان</div>
             </div>
-            <button class="btn btn-warning mt-3 w-100">ثبت سفارش</button>
+            <button class="btn btn-warning mt-3 w-100" (click)="fromInCartToOrder()">ثبت سفارش</button>
         </div>
 
         <ng-template #emptyCart>

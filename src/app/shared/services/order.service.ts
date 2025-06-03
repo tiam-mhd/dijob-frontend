@@ -12,7 +12,7 @@ export class OrderService {
 private baseUrl = "";
 
   constructor(private http: HttpClient, private globalService: GlobalService) {
-    this.baseUrl = `${this.globalService.apiUrl}/menu/item`
+    this.baseUrl = `${this.globalService.apiUrl}/order`
   }
 
   getAll(): Observable<Response<Order[]>> {
@@ -26,17 +26,37 @@ private baseUrl = "";
   getByCafe(id: number): Observable<Response<Order[]>> {
     return this.http.get<Response<Order[]>>(`${this.baseUrl}/ofcafe/${id}`);
   }
+  
+  getOfUser(userId: number): Observable<Response<Order[]>> {
+    return this.http.get<Response<Order[]>>(`${this.baseUrl}/OfUser/${userId}`);
+  }
+  
+  getCartOfUser(userId: number, cafeId: number): Observable<Response<Order[]>> {
+    return this.http.post<Response<Order[]>>(`${this.baseUrl}/cartOfUser`, {customerId: userId, cafeId: cafeId} as any);
+  }
 
   getById(id: number): Observable<Response<Order>> {
     return this.http.get<Response<Order>>(`${this.baseUrl}/${id}`);
   }
 
+  addToCart(order: Order): Observable<Response<Order>> {
+    return this.http.post<Response<Order>>(`${this.baseUrl}/addToCart`, {
+      customerId: order.customerId,
+      cafeId:order.cafeId,
+      items:order.items
+    } as Order);
+  }
+
+  fromInCartToOrder(id: number): Observable<Response<Order>> {
+    return this.http.put<Response<Order>>(`${this.baseUrl}/fromInCartToOrder/${id}`,{});
+  }
+  
   create(order: Order): Observable<Response<Order>> {
     return this.http.post<Response<Order>>(`${this.baseUrl}/add`, order);
   }
 
-  update(id: number, category: Partial<Order>): Observable<Response<Order>> {
-    return this.http.put<Response<Order>>(`${this.baseUrl}/${id}`, category);
+  update(id: number, order: Partial<Order>): Observable<Response<Order>> {
+    return this.http.put<Response<Order>>(`${this.baseUrl}/${id}`, order);
   }
 
   delete(id: number): Observable<Response<Order>> {

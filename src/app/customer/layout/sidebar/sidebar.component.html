@@ -1,18 +1,17 @@
-<div class="bg-dark text-white p-3 min-vh-100" style="width: 250px;">
-  <h4 class="mb-4">پنل ادمین</h4>
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <a routerLink="/admin/dashboard" class="nav-link text-white">داشبورد</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="/admin/users" class="nav-link text-white">کاربران</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="/admin/menu/category" class="nav-link text-white">دسته بندی منو</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="/admin/menu" class="nav-link text-white">آیتم های منو</a>
-    </li>
-    <!-- Add more items here -->
-  </ul>
+<!-- Overlay -->
+<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar-2 glassy-sidebar" [class.sidebar-open]="isSidebarOpen">
+  <div class="p-4 text-end">
+    <button class="btn btn-sm  mb-4 float-end" (click)="closeSidebar()">✖️</button>
+  </div>
+  <div class="p-4 text-start">
+    <ul class="list-unstyled">
+      <li class="mb-3" routerLink="/" (click)="closeSidebar()"><i class="bi bi-house-door me-2"></i> خانه</li>
+      <li class="mb-3" routerLink="/menu" (click)="closeSidebar()"><i class="bi bi-journal-bookmark me-2"></i> منوی غذا</li>
+      <li class="mb-3" routerLink="/order" (click)="closeSidebar()"><i class="bi bi-file-text me-2"></i> سفارشات</li>
+      <li class="mb-3" routerLink="/profile" (click)="closeSidebar()"><i class="bi bi-person-circle me-2"></i> پروفایل</li>
+    </ul>
+  </div>
 </div>
