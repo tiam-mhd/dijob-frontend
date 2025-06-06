@@ -29,4 +29,6 @@ export interface Order {
 //   payments: Payment[]
   createdAt: Date
   updatedAt: Date;
+
+  seeAllItems: boolean;
 }

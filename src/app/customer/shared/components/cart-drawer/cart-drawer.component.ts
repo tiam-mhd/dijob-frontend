@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CoreSharedModule } from '../../../../shared/core-shared.module';
 import { MenuItem } from '../../../../shared/models/menu-item';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, interval, takeWhile } from 'rxjs';
 import { OrderItem } from '../../../../shared/models/order-item';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../../../shared/services/order.service';
@@ -44,12 +44,19 @@ export class CartDrawerComponent {
   }
 
   fromInCartToOrder(){
-    let orderId = (this.orderItems.length > 0)? this.orderItems[0].orderId : 0;
-    this.orderService.fromInCartToOrder(orderId).subscribe(res=>{
-      if (res.isSuccess) {
-        this.orderItems = [];
-      }else{
-        
+    this.cartService.getCartOfUser();
+    interval(300).pipe(
+      takeWhile(() => !this.orderItems?.[0]?.orderId) // تا زمانی که orderId وجود نداره، ادامه بده
+    ).subscribe({
+      complete: () => {
+        const orderId = this.orderItems[0].orderId;
+        this.orderService.fromInCartToOrder(orderId).subscribe(res => {
+          if (res.isSuccess) {
+            this.cartService.clearCart();
+          } else {
+            // مدیریت خطا
+          }
+        });
       }
     });
   }

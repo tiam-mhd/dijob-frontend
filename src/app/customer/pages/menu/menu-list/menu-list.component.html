@@ -5,11 +5,15 @@
 
 <div class="container py-4">
     <div class="row g-3">
-        <div class="col-6" *ngFor="let item of items" (click)="openItemModal(item)">
-            <div class="glass-card p-3">
-                <h5 class="card-title">{{item.title}}</h5>
-                <p class="card-text">{{item.description}}</p>
-                <div (click)="onButtonClick($event)">
+        <div class="col-6 col-lg-3 col-md-4" *ngFor="let item of items" (click)="openItemModal(item)" #menuContainer>
+            <div class="glass-card p-0">
+                <img src="/assets/images/1.png" style="
+                width: 100%;
+    height: 8em;
+    object-fit: cover;" alt="">
+                <h5 class="card-title px-3 pt-3">{{item.title}}</h5>
+                <p class="card-text px-3">{{item.description}}</p>
+                <div (click)="onButtonClick($event)" class="pb-3 px-3">
                     <div *ngIf="getItemCount(item.id) === 0; else counter">
                         <button class="card-button btn btn-outline-warning" (click)="increaseQty(item)">افزودن به سبد
                             خرید</button>
@@ -17,7 +21,7 @@
                 </div>
 
                 <ng-template #counter (click)="$event.stopPropagation()">
-                    <div (click)="onButtonClick($event)">
+                    <div (click)="onButtonClick($event)" class="pb-3 px-3">
                         <div class="d-flex align-items-center gap-2">
                             <button class="btn btn-outline-warning btn-sm" style="padding: .1em 0.5em;"
                                 (click)="decreaseQty(item.id)">➖</button>

@@ -1,3 +1,51 @@
+.container{
+  font-size: .9em;
+}
+
+.custom-tabs-scroll-wrapper {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1em;
+  -webkit-overflow-scrolling: touch;
+}
+
+.custom-tabs-container-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  padding: 0.2rem .1rem;
+  min-width: max-content;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.custom-tab {
+  white-space: nowrap;
+  padding: 0.1rem .7rem;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.custom-tab:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.custom-tab.active {
+  background: linear-gradient(to right, #df5700, #df5700);
+    color: #ffffff;
+    font-weight: bold;
+    border: none;
+    box-shadow: 0 0px 6px rgb(254 150 0 / 40%);
+}
+
 .order-card-glass {
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
@@ -24,8 +72,8 @@
 
 /* سفارشی‌سازی وضعیت‌ها با رنگ لطیف */
 .status-badge.bg-warning {
-  background-color: rgba(255, 193, 7, 0.6) !important;
-  color: #212529 !important;
+  background-color: rgb(255 202 0) !important;
+  color: #000000 !important;
 }
 
 .status-badge.bg-success {
@@ -42,3 +90,4 @@
   background-color: rgba(23, 162, 184, 0.6) !important;
   color: #fff !important;
 }
+

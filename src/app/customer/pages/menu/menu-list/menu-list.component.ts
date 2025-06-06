@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CustomerSharedModule } from '../../../shared/customer-shared.module';
 import { MenuCategory } from '../../../../shared/models/menu-category';
 import { FormBuilder } from '@angular/forms';
@@ -10,6 +10,7 @@ import { OrderItem } from '../../../../shared/models/order-item';
 import { CartDrawerComponent } from '../../../shared/components/cart-drawer/cart-drawer.component';
 import { OrderService } from '../../../../shared/services/order.service';
 import { Order } from '../../../../shared/models/order';
+import autoAnimate from '@formkit/auto-animate';
 
 declare var bootstrap: any; // اگر از CDN استفاده می‌کنی
 
@@ -20,9 +21,10 @@ declare var bootstrap: any; // اگر از CDN استفاده می‌کنی
   templateUrl: './menu-list.component.html',
   styleUrl: './menu-list.component.scss'
 })
-export class MenuListComponent {
+export class MenuListComponent implements OnInit, AfterViewInit{
   @ViewChild('cartDrawer') cartDrawer!: CartDrawerComponent;
   @ViewChild('menuItemModal', { static: true }) modalRef!: ElementRef;
+  @ViewChild('menuContainer') menuContainer!: ElementRef;
 
   quantity = 0
   cafeId = 1;
@@ -48,7 +50,11 @@ export class MenuListComponent {
     this.cartService.getCartOfUser();
     this.loadCategories();
   }
-
+ngAfterViewInit(): void {
+  if (this.menuContainer) {
+    autoAnimate(this.menuContainer.nativeElement);
+  }
+}
   openItemModal(item: any) {
     this.selectedItem = item;
     this.quantity = this.cartService.getItemCount(item.id);

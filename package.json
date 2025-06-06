@@ -26,6 +26,7 @@
     "@coreui/coreui": "~5.2.0 || ~5.4.0",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-angular": "~5.4.13",
+    "@formkit/auto-animate": "^0.8.2",
     "@popperjs/core": "~2.11.8",
     "bootstrap": "^5.3.6",
     "bootstrap-rtl": "^3.3.4",

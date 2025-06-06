@@ -17,13 +17,14 @@ export class CartService {
 
   getCartOfUser() {
     this.orderService.getCartOfUser(4, 1).subscribe(res => {
-      
       if (res.isSuccess && res.data){
         const cart: Order = (res.data as any);
+        const i = new Map<number, OrderItem>();
         cart.items.forEach(item => {
-          if (!this.items.has(item.menuItemId))
-            this.items.set(item.menuItemId, { ...item, quantity: item.quantity } as OrderItem);
+          if (!i.has(item.menuItemId))
+            i.set(item.menuItemId, { ...item, quantity: item.quantity } as OrderItem);
         });
+        this.items = i;
         this.updateCart()
       }
     });
@@ -68,6 +69,11 @@ export class CartService {
     let total = 0;
     for (const item of this.items.values()) total += item.quantity;
     return total;
+  }
+
+  clearCart(){
+    this.items.clear();
+    this.updateCart();
   }
 
   private updateCart() {
