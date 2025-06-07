@@ -9,9 +9,9 @@ export class PricePipe implements PipeTransform {
 
     let amount = +value;
 
-    if (currency === 'toman') {
-      amount = Math.floor(amount / 10); // چون هر ۱۰ ریال = ۱ تومان
-    }
+    // if (currency === 'toman') {
+    //   amount = Math.floor(amount / 10); // چون هر ۱۰ ریال = ۱ تومان
+    // }
 
     // const formatted = amount.toLocaleString('fa-IR');
     const formatted = amount.toLocaleString('en-US');

@@ -1,0 +1,115 @@
+<div class="d-flex align-items-center mb-3">
+    <h4>سفارشات</h4>
+</div>
+
+<table class="table table-striped table-hover scrollable-table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col" style="width: 5%;"></th>
+            <th scope="col" style="width: 10%;">نام مشتری</th>
+            <th scope="col" style="width: 15%;">تعداد اقلام</th>
+            <th scope="col" style="width: 20%;">وضعیت</th>
+            <th scope="col" style="width: 30%;">نوع سفارش</th>
+            <th scope="col" style="width: 30%;">تاریخ ثبت</th>
+        </tr>
+    </thead>
+    <tbody style="max-height: 400px; overflow-y: auto;">
+        <tr *ngFor="let order of orders; let i = index" style="cursor: pointer;" data-bs-toggle="modal"
+            data-bs-target="#detailsModal" (click)="selectedOrder = order; selectedOrderItems = order.items">
+            <td style="width: 5%;font-size: .8em;">{{ i + 1 }}</td>
+            <td style="width: 10%;font-size: .8em;">{{ order.customer.fullName }}</td>
+            <td style="width: 15%;font-size: .8em;">{{ order.items.length }}</td>
+            <td style="width: 20%;font-size: .8em;"
+            (click)="selectedOrder = order" data-bs-toggle="modal"
+            data-bs-target="#statusModal">
+                <span class="badge status-badge" [ngClass]="getStatusClass(order.status)">
+                    {{ getStatusLabel(order.status) }}
+                    <i class="bi bi-pencil"></i>
+                </span>
+            </td>
+            <td style="width: 30%;font-size: .8em;">{{ getTypeLabel(order.type) }}</td>
+            <td style="width: 30%;font-size: .8em;">{{ order.createdAt | persianDate:'jD jMMMM jYYYY - HH:mm' }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="detailsModalLabel">{{ "جزئیات سفارش '" +
+                    (selectedOrder.customer?.fullName ?? "") + "'"}}</h1>
+                <button type="button" id="detailsModalClose" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="order-card-glass position-relative shadow p-4 rounded-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <small>{{ selectedOrder.createdAt | persianDate:'jD jMMMM jYYYY - HH:mm' }}</small>
+                        </div>
+                        <span class="badge status-badge" [ngClass]="getStatusClass(selectedOrder.status)">
+                            {{ getStatusLabel(selectedOrder.status) }}
+                        </span>
+                    </div>
+
+                    <ul class="list-unstyled mb-3">
+                        <li *ngFor="let item of selectedOrderItems; let i = index" class="my-1">
+                            {{ item.menuItem.title }} × {{ item.quantity + " عدد"}}
+                            <span class="float-end">
+                                {{ (item.menuItem.price * item.quantity) | price}}
+                            </span>
+                        </li>
+                        <!-- <li *ngIf="!selectedOrder.seeAllItems && selectedOrderItems.length>3" (click)="selectedOrder.seeAllItems = true">
+                            <div class="text-warning">
+                                نمایش همه ی آیتم ها ...
+                            </div>
+                        </li>
+                        <li *ngIf="selectedOrder.seeAllItems && selectedOrderItems.length>3" (click)="selectedOrder.seeAllItems = false">
+                            <div class="text-warning">
+                                خلاصه ش کن ...
+                            </div>
+                        </li> -->
+                    </ul>
+                    <hr>
+                    <div class="text-end fw-bold">
+                        <div class="d-inline-block w-50 text-start">جمع کل:</div>
+                        <div class="d-inline-block w-50"><b>{{ getTotal(selectedOrderItems) | price }}</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
+                <!-- <button type="button" class="btn btn-danger text-light" (click)="delete()">بله، حذف کن</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="statusModalLabel">{{ "ویرایش وضعیت سفارش '" +
+                    (selectedOrder.customer?.fullName ?? "") + "'"}}</h1>
+                <button type="button" id="statusModalClose" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                        <label class="form-label">وضعیت</label>
+                        <select name="category" id="category" class="form-control"
+                            [(ngModel)]="selectedOrder.status">
+                            <option value=0>انتخاب وضعیت</option>
+                            <option *ngFor="let s of orderStatuses" [value]="s.key">{{ s.label }}</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
+                <button type="button" class="btn btn-success text-light">ثبت</button>
+            </div>
+        </div>
+    </div>
+</div>
