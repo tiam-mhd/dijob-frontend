@@ -25,6 +25,9 @@ export class ItemListComponent {
   selectedItem: MenuItem = { id: 0 } as MenuItem;
   showForm: boolean = false;
 
+  imageFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
+
   constructor(private fb: FormBuilder, private categoryService: MenuCategoryService, private itemService: MenuItemService) {
 
     this.itemForm = this.fb.group({ title: '', price: 0, categoryId: 0, description: '' } as MenuItem);
@@ -56,6 +59,8 @@ export class ItemListComponent {
   }
 
   saveItem() {
+    const formData = new FormData();
+
     let data = {
       title: this.selectedItem.title,
       price: +this.selectedItem.price,
@@ -65,12 +70,30 @@ export class ItemListComponent {
       categoryId: +this.selectedItem.categoryId
     } as MenuItem
 
+    formData.append('body', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+
+    if (this.imageFile) {
+      formData.append('image', this.imageFile);
+    }
+
     if (this.selectedItem.id != 0) {
-      this.itemService.update(this.selectedItem.id, data).subscribe(() => this.loadCategories());
+      this.itemService.update(this.selectedItem.id, formData).subscribe(() => this.loadCategories());
     } else {
-      this.itemService.create(data).subscribe(() => this.loadMenuItems());
+      this.itemService.create(formData).subscribe(() => this.loadMenuItems());
     }
     this.closeModal("crudModal")
+  }
+  onImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.imageFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   delete() {

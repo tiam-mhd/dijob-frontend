@@ -31,12 +31,12 @@ private baseUrl = "";
     return this.http.get<Response<MenuItem>>(`${this.baseUrl}/${id}`);
   }
 
-  create(item: MenuItem): Observable<Response<MenuItem>> {
-    return this.http.post<Response<MenuItem>>(`${this.baseUrl}/add`, item);
+  create(data: FormData): Observable<Response<MenuItem>> {
+    return this.http.post<Response<MenuItem>>(`${this.baseUrl}/add`, data);
   }
 
-  update(id: number, category: Partial<MenuItem>): Observable<Response<MenuItem>> {
-    return this.http.put<Response<MenuItem>>(`${this.baseUrl}/${id}`, category);
+  update(id: number, data: FormData): Observable<Response<MenuItem>> {
+    return this.http.put<Response<MenuItem>>(`${this.baseUrl}/${id}`, data,);
   }
 
   delete(id: number): Observable<Response<MenuItem>> {

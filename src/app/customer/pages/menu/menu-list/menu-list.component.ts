@@ -11,6 +11,7 @@ import { CartDrawerComponent } from '../../../shared/components/cart-drawer/cart
 import { OrderService } from '../../../../shared/services/order.service';
 import { Order } from '../../../../shared/models/order';
 import autoAnimate from '@formkit/auto-animate';
+import { GlobalService } from '../../../../shared/services/global.service';
 
 declare var bootstrap: any; // اگر از CDN استفاده می‌کنی
 
@@ -26,6 +27,8 @@ export class MenuListComponent implements OnInit, AfterViewInit{
   @ViewChild('menuItemModal', { static: true }) modalRef!: ElementRef;
   @ViewChild('menuContainer') menuContainer!: ElementRef;
 
+  baseUrl: string = "";
+
   quantity = 0
   cafeId = 1;
   categories: MenuCategory[] = [] as MenuCategory[]
@@ -40,10 +43,12 @@ export class MenuListComponent implements OnInit, AfterViewInit{
   constructor(private categoryService: MenuCategoryService,
     private itemService: MenuItemService,
     private orderService: OrderService,
-    private cartService: CartService) {
+    private cartService: CartService,
+  private globalService: GlobalService) {
     this.cartService.cart$.subscribe(items => {
       this.cartItems = items;
     });
+    this.baseUrl = globalService.apiUrl;
   }
 
   ngOnInit(): void {
