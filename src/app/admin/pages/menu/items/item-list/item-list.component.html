@@ -9,6 +9,7 @@
     <thead class="thead-light">
         <tr>
             <th scope="col" style="width: 5%;"></th>
+            <th scope="col" style="width: 5%;"></th>
             <th scope="col" style="width: 10%;">عنوان</th>
             <th scope="col" style="width: 15%;">قیمت</th>
             <th scope="col" style="width: 20%;">دسته بندی</th>
@@ -19,12 +20,15 @@
     <tbody style="max-height: 400px; overflow-y: auto;">
         <tr *ngFor="let item of items; let i = index" style="cursor: pointer;">
             <td style="width: 5%;font-size: .8em;">{{ i + 1 }}</td>
+            <td style="width: 5%;font-size: .8em;">
+                <img style="width: 100%;" [src]="(item.image)? baseUrl + '/uploads/menu-items/' + item.image : '/assets/images/1.png'" alt="">
+            </td>
             <td style="width: 10%;font-size: .8em;">{{ item.title }}</td>
             <td style="width: 15%;font-size: .8em;">{{ item.price }}</td>
             <td style="width: 20%;font-size: .8em;">{{ item.category.title }}</td>
             <td style="width: 30%;font-size: .8em;">{{ item.description }}</td>
             <td class="text-center" style="width: 30%;font-size: .8em;">
-                <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedItem = item" data-bs-toggle="modal"
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="selectedItem = item; imagePreview = null" data-bs-toggle="modal"
                     data-bs-target="#crudModal">ویرایش</button>
                 <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                     (click)="selectedItem = item">حذف</button>
@@ -76,9 +80,9 @@
                         <input type="file" class="form-control" (change)="onImageSelected($event)" />
                     </div>
 
-                    <div *ngIf="imagePreview" class="mb-3">
-                        <img [src]="imagePreview" alt="پیش‌نمایش" class="img-fluid rounded"
-                            style="max-height: 200px;" />
+                    <div *ngIf="imagePreview || selectedItem.image" class="mb-3">
+                        <img [src]="selectedItem.image ? baseUrl + '/uploads/menu-items/' + selectedItem.image: imagePreview" alt="پیش‌نمایش" class="img-fluid rounded"
+                            style="max-height: 200px;" width="150" />
                     </div>
                     
                     <div class="mb-3">
