@@ -8,12 +8,10 @@
     </div>
   </div>
 
-
-
-
   <div class="row g-4">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let order of filteredOrders">
-      <div class="order-card-glass position-relative shadow p-4 rounded-4 text-white">
+      <div class="order-card-glass position-relative shadow p-4 rounded-4 text-white"
+        [ngClass]="{'cancelled':order.status=='CANCELLED','completed':order.status == 'COMPLETED'}">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <small>{{ order.createdAt | persianDate:'jD jMMMM jYYYY - HH:mm' }}</small>
@@ -48,6 +46,37 @@
           <div class="d-inline-block w-50 text-start">💵 جمع کل:</div>
           <div class="d-inline-block w-50"><b>{{ getTotal(order.items) | price }}</b></div>
         </div>
+        <hr>
+        <div *ngIf="order.status == 'PENDING'">
+          <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#statusModal"
+            (click)="selectedOrder = order">لغو سفارش</button>
+        </div>
+        <div *ngIf="order.status == 'COMPLETED'">
+          <button class="btn btn-light w-100">ثبت نظر</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="statusModalLabel">{{ "لغو سفارش" +
+          ((selectedOrder.customer) ? "'" + selectedOrder.customer.fullName + "'" : "")}}</h1>
+        <button type="button" id="statusModalClose" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <span>مطمئنی؟</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeStatusModal>لغو</button>
+        <button type="button" class="btn btn-danger text-light" (click)="changeStatus()">آره لغوش کن</button>
       </div>
     </div>
   </div>

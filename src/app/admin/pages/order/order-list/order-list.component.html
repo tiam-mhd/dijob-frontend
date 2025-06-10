@@ -39,7 +39,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="detailsModalLabel">{{ "جزئیات سفارش '" +
-                    (selectedOrder.customer?.fullName ?? "") + "'"}}</h1>
+                    ((selectedOrder.customer) ? selectedOrder.customer.fullName : "") + "'"}}</h1>
                 <button type="button" id="detailsModalClose" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -92,7 +92,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="statusModalLabel">{{ "ویرایش وضعیت سفارش '" +
-                    (selectedOrder.customer?.fullName ?? "") + "'"}}</h1>
+                    ((selectedOrder.customer) ? selectedOrder.customer.fullName : "") + "'"}}</h1>
                 <button type="button" id="statusModalClose" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -107,8 +107,8 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">لغو</button>
-                <button type="button" class="btn btn-success text-light">ثبت</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeStatusModal>لغو</button>
+                <button type="button" class="btn btn-success text-light" (click)="changeStatus()">ثبت</button>
             </div>
         </div>
     </div>

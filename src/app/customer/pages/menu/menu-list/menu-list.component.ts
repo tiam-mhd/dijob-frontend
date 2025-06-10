@@ -81,17 +81,17 @@ ngAfterViewInit(): void {
     let id = localStorage.getItem("cafeId");
     if (id) {
       this.categoryService.getByCafe(+id).subscribe(res => {
-        this.categories = res.data as MenuCategory[];
+        this.categories = (res.data as MenuCategory[]).sort((a,b)=> a.order - b.order);
         this.selectedCategory = this.categories[0];
-        this.loadItems(this.categories[0].id);
+        this.loadItems(this.categories[0]);
       });
     }
   }
 
-  loadItems(id: number) {
-    // let id = localStorage.getItem("cafeId");
-    if (id) {
-      this.itemService.getByCategory(+id).subscribe(res => {
+  loadItems(category: MenuCategory) {
+    this.selectedCategory = category;
+    if (category.id) {
+      this.itemService.getByCategory(+category.id).subscribe(res => {
         this.items = res.data as MenuItem[];
       });
     }
@@ -104,7 +104,7 @@ ngAfterViewInit(): void {
 
   selectItem(item: MenuItem) {
     this.quantity = this.cartService.getItemCount(item.id);
-    this.selectedItem = item;
+    this.selectedItem = {...item};
   }
 
   clearSelectedCategory() {

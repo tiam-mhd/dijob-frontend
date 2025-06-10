@@ -47,6 +47,7 @@
 }
 
 .order-card-glass {
+  cursor: pointer;
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   background-color: rgba(255, 255, 255, 0.1);
@@ -54,6 +55,14 @@
   border-radius: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease-in-out;
+}
+
+.order-card-glass.cancelled{
+  background-color: rgb(50 50 50);
+}
+
+.order-card-glass.completed{
+  background-color: rgb(18 151 0 / 44%);
 }
 
 .order-card-glass:hover {

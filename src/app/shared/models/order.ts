@@ -27,7 +27,7 @@ export interface Order {
   items: OrderItem[]
 //   feedback: Feedback
 //   payments: Payment[]
-  createdAt: Date
+  createdAt: Date;
   updatedAt: Date;
 
   seeAllItems: boolean;

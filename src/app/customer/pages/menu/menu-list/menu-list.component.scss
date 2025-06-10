@@ -13,6 +13,7 @@
   }
   
   .category-item {
+    cursor: pointer;
     display: inline-block;
     padding: 10px 16px;
     background: rgba(255, 255, 255, 0.15);
@@ -26,6 +27,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
+  .category-item.active{
+    background: #f9b115 !important;
+    color: black !important;
+  }
+
   .category-item:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
@@ -33,6 +39,7 @@
   
 
   .glass-card {
+    cursor: pointer;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -88,5 +95,14 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     box-shadow: 0 8px 32px rgb(0 0 0 / 67%);
+  }
+
+  .menu-item-details-image{
+    display: block;
+    max-width: 15em;
+    max-height: 10em;
+    border-radius: 0.5em;
+    margin: 0 auto 1em auto;
+    object-fit: cover;
   }
   

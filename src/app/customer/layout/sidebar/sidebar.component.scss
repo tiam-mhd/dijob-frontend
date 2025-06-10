@@ -13,7 +13,7 @@
   position: fixed;
   top: 0;
   right: -80%;
-  width: 70%;
+  width: 25%;
   height: 100vh;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px);
@@ -25,4 +25,47 @@
 
 .glassy-sidebar.sidebar-open {
   right: 0;
+}
+
+li{
+  cursor: pointer;
+  margin: 0 !important;
+  padding: .5em 0;
+  border-radius: .5em;
+  transition: .5s;
+}
+li:hover{
+  background-color: #00000059;
+}
+
+/* تبلت‌ها با عرض متوسط */
+@media (max-width: 992px) {
+  .glassy-sidebar {
+    width: 40%;
+    right: -40%;
+  }
+}
+
+/* تبلت‌های کوچک */
+@media (max-width: 768px) {
+  .glassy-sidebar {
+    width: 50%;
+    right: -50%;
+  }
+}
+
+/* موبایل‌های بزرگ */
+@media (max-width: 576px) {
+  .glassy-sidebar {
+    width: 60%;
+    right: -60%;
+  }
+}
+
+/* موبایل‌های کوچک */
+@media (max-width: 400px) {
+  .glassy-sidebar {
+    width: 80%;
+    right: -80%;
+  }
 }

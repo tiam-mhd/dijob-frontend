@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CustomerSharedModule } from '../../../shared/customer-shared.module';
 import { OrderService } from '../../../../shared/services/order.service';
 import { Order, OrderStatus } from '../../../../shared/models/order';
@@ -14,7 +14,10 @@ import { PricePipe } from '../../../../shared/pipes/price.pipe';
 })
 export class OrderListComponent implements OnInit {
 
+  @ViewChild('closeStatusModal') closeStatusModal!: ElementRef;
+
   orders: Order[] = [] as Order[];
+  selectedOrder: Order = {id:0} as Order;
   filteredOrders: Order[] = [] as Order[];
   selectedStatus: OrderStatus | 'ALL' = 'ALL';
 
@@ -58,11 +61,11 @@ export class OrderListComponent implements OnInit {
   getStatusClass(status: OrderStatus): string {
     switch (status) {
       case OrderStatus.PENDING: return 'bg-warning text-light';
-      case OrderStatus.CONFIRMED: return 'bg-primary text-primary';
+      case OrderStatus.CONFIRMED: return 'bg-primary text-light';
       case OrderStatus.PREPARING: return ' bg-info text-info';
-      case OrderStatus.DELIVERING: return 'bg-light text-secondary';
+      case OrderStatus.DELIVERING: return 'bg-secondary text-light';
       case OrderStatus.COMPLETED: return 'bg-success text-success';
-      case OrderStatus.CANCELLED: return 'bg-secondary text-danger';
+      case OrderStatus.CANCELLED: return 'bg-light text-secondary';
       default: return 'text-muted';
     }
   }
@@ -71,6 +74,14 @@ export class OrderListComponent implements OnInit {
     return orderItems.reduce((sum, item) => {
       return sum + (item.menuItem?.price || 0) * item.quantity;
     }, 0);
+  }
+
+  changeStatus() {
+    const order: Order = {...this.selectedOrder};
+    this.orderService.changeStatus(order.id, OrderStatus.CANCELLED).subscribe((res) => {
+      this.getOrders();
+      this.closeStatusModal.nativeElement.click();
+    })
   }
 
   filterOrdersByStatus(status: OrderStatus | 'ALL') {

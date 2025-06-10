@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { GlobalService } from './global.service';
 import { Observable } from 'rxjs';
 import { Response } from '../models/response';
-import { Order } from '../models/order';
+import { Order, OrderStatus } from '../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +49,10 @@ private baseUrl = "";
 
   fromInCartToOrder(id: number): Observable<Response<Order>> {
     return this.http.put<Response<Order>>(`${this.baseUrl}/fromInCartToOrder/${id}`,{});
+  }
+  
+  changeStatus(id: number, status: OrderStatus): Observable<Response<Order>> {
+    return this.http.put<Response<Order>>(`${this.baseUrl}/changeStatus/${id}`,{status});
   }
   
   create(order: Order): Observable<Response<Order>> {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AdminSharedModule } from '../../../shared/admin-shared.module';
 import { Order, OrderStatus, OrderType } from '../../../../shared/models/order';
 import { OrderItem } from '../../../../shared/models/order-item';
@@ -13,6 +13,9 @@ import { PersianDatePipe } from '../../../../shared/pipes/persian-date.pipe';
   styleUrl: './order-list.component.scss'
 })
 export class OrderListComponent {
+
+  @ViewChild('closeStatusModal') closeStatusModal!: ElementRef;
+
   cafeId = localStorage.getItem("cafeId");
 
   crudModalTitle = "افزودن آیتم جدید";
@@ -24,8 +27,7 @@ export class OrderListComponent {
     { key: OrderStatus.CONFIRMED, label: 'تأیید شده' },
     { key: OrderStatus.PREPARING, label: 'در حال آماده‌سازی' },
     { key: OrderStatus.DELIVERING, label: 'در حال ارسال' },
-    { key: OrderStatus.COMPLETED, label: 'تکمیل شده' },
-    { key: OrderStatus.CANCELLED, label: 'لغو شده' }
+    { key: OrderStatus.COMPLETED, label: 'تکمیل شده' }
   ];
 
   selectedOrder: Order = { id: 0 } as Order;
@@ -39,8 +41,7 @@ export class OrderListComponent {
     let id = localStorage.getItem("cafeId");
     if (id) {
       this.orderService.getByCafe(+id).subscribe(res => {
-        console.log(res);
-        this.orders = res.data as Order[];
+        this.orders = (res.data as Order[]).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       });
     }
   }
@@ -116,5 +117,12 @@ export class OrderListComponent {
     return orderItems.reduce((sum, item) => {
       return sum + (item.menuItem?.price || 0) * item.quantity;
     }, 0);
+  }
+
+  changeStatus() {
+    this.orderService.changeStatus(this.selectedOrder.id, this.selectedOrder.status).subscribe(() => {
+      this.loadOrders();
+      this.closeStatusModal.nativeElement.click();
+    })
   }
 }

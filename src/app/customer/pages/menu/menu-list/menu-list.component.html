@@ -1,5 +1,7 @@
 <nav class="category-navbar d-flex gap-2 px-3 py-2 overflow-auto">
-    <a class="category-item" *ngFor="let category of categories" (click)="loadItems(category.id)">{{ category.title
+    <a class="category-item" 
+    [ngClass]="{'active': category == selectedCategory}"
+    *ngFor="let category of categories" (click)="loadItems(category)">{{ category.title
         }}</a>
 </nav>
 
@@ -47,6 +49,8 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body text-white text-center">
+                <img *ngIf="selectedItem.image" [src]="baseUrl + '/uploads/menu-items/' + selectedItem.image"
+                class="menu-item-details-image" alt="">
                 <p class="mb-2">{{selectedItem.description}}</p>
                 <p class="fw-bold">قیمت: {{selectedItem.price}}</p>
 
